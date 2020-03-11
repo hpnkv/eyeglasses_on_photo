@@ -1,0 +1,6 @@
+Pillow
+torchvision
+imutils
+torch
+numpy
+dlib

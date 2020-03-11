@@ -1,11 +1,12 @@
 import argparse
+import os
 from datetime import datetime
 
 import torch
 from torch.utils.data import DataLoader
 from torchvision.transforms import Compose
 
-from ml_glasses.commons import FaceAlignTransform, ToTensor
+from ml_glasses.transforms import FaceAlignTransform, ToTensor
 from ml_glasses.data import InferenceDataset
 from ml_glasses.model import GlassesClassifier
 
@@ -15,7 +16,6 @@ def main(args):
         FaceAlignTransform(args.face_detector, args.shape_predictor),
         ToTensor()
     ]))
-    dataloader = DataLoader(dataset, batch_size=1)
 
     classifier = GlassesClassifier().to(args.device)
     classifier.load_state_dict(torch.load(args.model, map_location=torch.device(args.device)))
@@ -25,12 +25,13 @@ def main(args):
         print('Ready for inference')
     inference_start = datetime.now()
 
+    dataloader = DataLoader(dataset, batch_size=1)
     for sample in dataloader:
         image = sample['image'].to(args.device)
         preds = classifier.forward(image)
         _, labels = torch.max(preds.data, 1)
         if labels.item() == 1:
-            filename = sample['filename'][0]
+            filename = os.path.split(sample['filename'][0])[-1]
             print(filename)
 
     if args.time:
@@ -54,7 +55,8 @@ if __name__ == '__main__':
                         help='Path to dlib\'s shape predictor model')
     parser.add_argument('--face-detector', type=str, required=False,
                         help='Path to dlib\'s face detector model')
-    parser.add_argument('--time', type=bool, required=False, default=False)
+    parser.add_argument('--time', type=bool, required=False, default=False,
+                        help='Compute and print inference time per sample')
 
     args = parser.parse_args()
     main(args)

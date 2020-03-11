@@ -2,3 +2,7 @@
 **/*.jpg
 **/*.jpeg
 *.dat
+.idea/
+.DS_Store/
+.DS_Store
+**/__pycache__/

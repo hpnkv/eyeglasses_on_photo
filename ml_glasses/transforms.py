@@ -1,15 +1,16 @@
+import random
+
 import dlib
 import numpy as np
 import torch
-import random
 from imutils import opencv2matplotlib
 from imutils.face_utils import FaceAligner
 from torchvision.transforms import CenterCrop, functional as F
 
 
 class FaceAlignTransform:
-    def __init__(self, detector_model='./mmod_human_face_detector.dat',
-                 shape_predictor='./shape_predictor_68_face_landmarks.dat',
+    def __init__(self, detector_model='../mmod_human_face_detector.dat',
+                 shape_predictor='../shape_predictor_68_face_landmarks.dat',
                  desired_face_width=120, desired_left_eye=(0.35, 0.5)):
         self.detector = dlib.cnn_face_detection_model_v1(detector_model)
         self.predictor = dlib.shape_predictor(shape_predictor)

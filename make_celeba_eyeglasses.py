@@ -1,3 +1,4 @@
+import os
 import random
 
 import torch
@@ -5,7 +6,7 @@ import torchvision
 from PIL import Image
 from tqdm import tqdm
 
-from ml_glasses.commons import FaceAlignTransform
+from ml_glasses.transforms import FaceAlignTransform
 
 CELEBA_EYEGLASSES_SEED = 5
 
@@ -35,7 +36,7 @@ def main():
         idxs = list(range(len(celeba)))
         random.shuffle(idxs)  # to pick random no-eyeglasses samples
 
-        meta_file = open(f'meta_celeba_{split}.txt', 'w')
+        meta_file = open(os.path.join('data', f'meta_celeba_{split}.txt'), 'w')
 
         errors = 0
 
@@ -49,7 +50,7 @@ def main():
                     label = 1 if has_eyeglasses else 0
                     image = aligner(image)
 
-                    filename = f'celeba_eyeglasses_{split}/{idx}_{label}.png'
+                    filename = os.path.join('data', f'celeba_eyeglasses_{split}', f'{idx}_{label}.png')
                     Image.fromarray(image).save(filename)
                     meta_file.write(f'{idx}_{label}.png {label}\n')
 
