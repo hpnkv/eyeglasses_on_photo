@@ -31,6 +31,24 @@ python infer.py -i <Directory with input images> -d <Device as in torch.to(), de
 
 ## Pipeline
 
+### Inference
+
+- Input image is scaled to 256 pixels by the smaller side, conserving the aspect ratio
+- Face is detected on the photo using `dlib`'s CNN face detector
+  - if the detector sees no faces, it takes a square center crop of the image
+- Pose is estimated using `dlib`'s implementation of the paper
+«One Millisecond Face Alignment with an Ensemble of Regression Trees» by
+Vahid Kazemi and Josephine Sullivan, CVPR 2014,
+ trained on the iBUG 300-W face landmark dataset
+- Face is aligned into a square shape using a face aligner utility from `imutils`
+- A convolutional neural network from `ml_glasses/model.py` is applied to get the prediction
+
+Average inference time using `dlib` built with CUDA support is ~3-4 ms per image for all of the stages above.
+
+### Preparation and training
+
+All models were trained for 50 epochs.
+
 ## Metrics
 
 ## Error analysis
