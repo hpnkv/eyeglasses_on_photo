@@ -49,8 +49,6 @@ if __name__ == '__main__':
                         help='Path to input images directory')
     parser.add_argument('-d', '--device', type=str, default='cuda', required=False,
                         help='Which device to run on (default is \'cuda\')')
-    parser.add_argument('-o', '--output', type=str, required=False,
-                        help='Path to output file (prints to stdout if empty)')
     parser.add_argument('--shape-predictor', type=str, required=False,
                         help='Path to dlib\'s shape predictor model')
     parser.add_argument('--face-detector', type=str, required=False,

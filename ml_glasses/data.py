@@ -5,9 +5,9 @@ from PIL import Image
 from torch.utils.data import Dataset
 
 
-class MeGlassDataset(Dataset):
+class EyeGlassDataset(Dataset):
     def __init__(self, lines, images_path, transform=None):
-        super(MeGlassDataset, self).__init__()
+        super(EyeGlassDataset, self).__init__()
 
         self.images_path = images_path
         self.filenames = []

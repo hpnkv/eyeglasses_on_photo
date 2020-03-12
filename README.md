@@ -1,4 +1,8 @@
-# Eyeglasses presence classifier
+# Eyeglasses presence classifier test
+
+This repository contains a pipeline to find images of faces of people wearing eyeglasses. It consists of a small CNN working on top of a face detector and face landmark predictor from `dlib`. It uses two datasets, [MeGlass](https://github.com/cleardusk/MeGlass) and a custom slice from [CelebA](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html), for training and achieves a validation accuracy of 98.62% and 99.7% respectively.
+
+If all dependencies are built with CUDA support, the inference time is under 10 ms per image, and is usually around 3–4 ms.
 
 ## Instructions
 
@@ -51,9 +55,23 @@ All models were trained for 50 epochs.
 
 ## Metrics
 
+| # | trained on | # epochs | acc., CelebA | acc., MeGlass | acc., joint | Comment |
+|---|---|---|---|---|---|---|
+| 1 | CelebA |  | **97.6%** | 96.02%  |   |   |
+| 2 | MeGlass |  |  | 98.89% |   |   |
+| 3 | Joint data  | 76 | 98.43% | 99.7% |   | 50% chance HFlip augmentation |
+| 4 | Joint data | 47 | 98.62% |  |   | 50% chance HFlip, 10% chance blur |
+| 5 | Joint data  | 17 | 98.55% | |   | Augmentations + resblocks |
+| 6 |   |   |   |  | |   |
+| 7 |   |   |   | |  |   |
+
 ## Error analysis
 
 ## Improvements
+
+- Even though dlib's face detector uses GPU, it still ships data back to the CPU. This could be avoided by using a fully PyTorch-based (or -compatible) pipeline, reducing inference time and raising GPU utilization during training.
+- If we needed an even higher quality, we could try approaches such as knowledge distillation from a bigger network (which can itself be a fine-tuned after a general image classifier), more augmentations such as color jitters.
+- Face detector and shape predictor may be suboptimal, maybe there exist better ones.
 
 ## Datasets
 
@@ -69,12 +87,12 @@ This repository contains a script `make_celeba_eyeglasses.py` to produce a datas
 
 | Dataset | # of samples | Eyeglasses | No eyeglasses |
 |---|---|---|---|
-| MeGlass train | 47,917 | 14,832 | 33,085 |
-| MeGlass test | 6,840 | 3,420 | 3,420 |
-|   |   |   |   |
-|   |   |   |   |
-|   |   |   |   |
-|   |   |   |   |
+| MeGlass, train | 47,917 | 14,832 | 33,085 |
+| MeGlass, test | 6,840 | 3,420 | 3,420 |
+| CelebA eyeglasses, train | 20,929 |   |   |
+| CelebA eyeglasses, test | 2,752 |   |   |
+| Joint, train |   |   |   |
+| Joint, test |   |   |   |
 |   |   |   |   |
 
 ## References

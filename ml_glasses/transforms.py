@@ -6,6 +6,7 @@ import torch
 from imutils import opencv2matplotlib
 from imutils.face_utils import FaceAligner
 from torchvision.transforms import CenterCrop, functional as F
+from PIL import ImageFilter
 
 
 class FaceAlignTransform:
@@ -37,6 +38,17 @@ class RandomHorizontalFlip:
     def __call__(self, image):
         if random.random() < self.p:
             image = F.hflip(image)
+
+        return image
+
+
+class RandomGaussianBlur:
+    def __call__(self, image):
+        dice_roll = random.random()
+        if dice_roll < 0.02:
+            image = image.filter(ImageFilter.GaussianBlur(radius=2))
+        elif dice_roll < 0.1:
+            image = image.filter(ImageFilter.GaussianBlur(radius=1))
 
         return image
 

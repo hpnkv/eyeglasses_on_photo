@@ -4,3 +4,4 @@ imutils
 torch
 numpy
 dlib
+tqdm
