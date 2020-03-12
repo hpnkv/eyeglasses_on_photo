@@ -1,7 +1,9 @@
 Pillow
 torchvision
 imutils
-torch
+pytorch
 numpy
 dlib
 tqdm
+scikit-learn
+opencv-python

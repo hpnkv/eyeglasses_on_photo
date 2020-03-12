@@ -1,13 +1,12 @@
 import random
-import time
 
 import dlib
 import numpy as np
 import torch
+from PIL import ImageFilter
 from imutils import opencv2matplotlib
 from imutils.face_utils import FaceAligner
 from torchvision.transforms import CenterCrop, functional as F
-from PIL import ImageFilter
 
 
 class FaceAlignTransform:
@@ -48,10 +47,10 @@ class RandomHorizontalFlip:
 
 class RandomGaussianBlur:
     def __call__(self, image):
-        dice_roll = random.random()
-        if dice_roll < 0.02:
+        random_roll = random.random()
+        if random_roll < 0.02:
             image = image.filter(ImageFilter.GaussianBlur(radius=2))
-        elif dice_roll < 0.1:
+        elif random_roll < 0.1:
             image = image.filter(ImageFilter.GaussianBlur(radius=1))
 
         return image
@@ -60,6 +59,11 @@ class RandomGaussianBlur:
 class ToTensor:
     def __call__(self, image):
         image = np.array(image)
+
+        mean = np.mean(image)
+        channel_means = np.mean(image, axis=(0, 1))
+        image = mean * image / channel_means
+
         image = image.transpose((2, 0, 1))
         image = torch.from_numpy(image).float() / 255
 
