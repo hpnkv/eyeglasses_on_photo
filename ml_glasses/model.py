@@ -69,15 +69,19 @@ class ResBlock(nn.Module):
         return self.relu(x + self.bn2(self.conv_2(self.conv_bn_relu_1(x))))
 
 
-class ResidualGlassesClassifier(nn.Module):
+class DeeperGlassesClassifier(nn.Module):
     def __init__(self):
-        super(ResidualGlassesClassifier, self).__init__()
+        super(DeeperGlassesClassifier, self).__init__()
 
         self.conv1 = conv_bn_relu(3, 16, kernel=3, padding=1)
         self.conv2 = ResBlock(16)
         self.conv3 = conv_bn_relu(16, 32, kernel=3, padding=1)
         self.conv4 = ResBlock(32)
-        self.conv5 = conv_bn_relu(32, 16, kernel=3, padding=1)
+        self.conv5 = conv_bn_relu(32, 64, kernel=3, padding=1)
+        self.conv6 = ResBlock(64)
+        self.conv7 = conv_bn_relu(64, 32, kernel=3, padding=1)
+        self.conv8 = ResBlock(32)
+        self.conv9 = conv_bn_relu(32, 16, kernel=3, padding=1)
 
         self.maxpool = nn.MaxPool2d(kernel_size=2)
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
@@ -93,15 +97,21 @@ class ResidualGlassesClassifier(nn.Module):
 
     def forward(self, x):
         x = self.conv1(x)
-        x = self.maxpool(x)
-
         x = self.conv2(x)
         x = self.maxpool(x)
 
-        x = self.conv4(self.conv3(x))
+        x = self.conv3(x)
+        x = self.conv4(x)
         x = self.maxpool(x)
 
+        x = self.conv4(x)
         x = self.conv5(x)
+        x = self.conv6(x)
+        x = self.maxpool(x)
+
+        x = self.conv7(x)
+        x = self.conv8(x)
+        x = self.conv9(x)
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
         x = self.fc(x)

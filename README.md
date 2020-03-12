@@ -30,6 +30,8 @@ chmod +x ./download_dlib_models.sh
 ./download_dlib_models.sh
 ```
 
+Prepared data can be downloaded from [Google Drive](https://drive.google.com/file/d/1wng_UnUZznxiSDF5xzq-dbiE3G8-ap8c/view?usp=sharing). Unpack the zip file and overwrite the `data` folder. 
+
 ### Inference
 
 ```
@@ -85,6 +87,7 @@ All models were allowed to train for 200 epochs. Epochs column cites when the be
 | 4 | Joint data | 47 | 98.62% | 99.7% | 50% chance HFlip, 10% chance blur |
 | 5 | Joint data  | 17 | 98.55% | 99.7% | Augmentations + resblocks |
 | 6 | Joint data  | 140 | 98.73% | 99.7% | 50% chance HFlip, 10% chance blur, white balance correction  |
+| 7 | Joint data | | | | Deeper architecture |
 
 ## Improvement ideas
 
