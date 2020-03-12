@@ -1,4 +1,5 @@
 import random
+import time
 
 import dlib
 import numpy as np
@@ -14,6 +15,9 @@ class FaceAlignTransform:
                  shape_predictor='../shape_predictor_68_face_landmarks.dat',
                  desired_face_width=120, desired_left_eye=(0.35, 0.5)):
         self.detector = dlib.cnn_face_detection_model_v1(detector_model)
+        # it does something during the first call, so I call a dummy detection in __init__
+        self.detector(np.zeros((256, 256), dtype=np.uint8), 1)
+
         self.predictor = dlib.shape_predictor(shape_predictor)
         self.aligner = FaceAligner(self.predictor, desiredFaceWidth=desired_face_width, desiredLeftEye=desired_left_eye)
         self.fallback_crop = CenterCrop(desired_face_width)

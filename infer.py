@@ -6,9 +6,9 @@ import torch
 from torch.utils.data import DataLoader
 from torchvision.transforms import Compose
 
-from ml_glasses.transforms import FaceAlignTransform, ToTensor
 from ml_glasses.data import InferenceDataset
 from ml_glasses.model import GlassesClassifier
+from ml_glasses.transforms import FaceAlignTransform, ToTensor
 
 
 def main(args):
@@ -23,21 +23,26 @@ def main(args):
 
     if args.time:
         print('Ready for inference')
-    inference_start = datetime.now()
+    start_time = datetime.now()
+    total_seconds_in_classifier = 0.0
 
     dataloader = DataLoader(dataset, batch_size=1)
     for sample in dataloader:
+        inference_start = datetime.now()
         image = sample['image'].to(args.device)
         preds = classifier.forward(image)
+        total_seconds_in_classifier += (datetime.now() - inference_start).total_seconds()
         _, labels = torch.max(preds.data, 1)
         if labels.item() == 1:
             filename = os.path.split(sample['filename'][0])[-1]
             print(filename)
 
     if args.time:
-        avg_elapsed = (datetime.now() - inference_start).microseconds / 1000 / len(dataset)
+        avg_elapsed = (datetime.now() - start_time).total_seconds() * 1000 / len(dataset)
+        avg_in_classifier = total_seconds_in_classifier * 1000 / len(dataset)
         print(
-            f'Inference complete in {avg_elapsed:.2f} ms per sample')
+            f'Inference complete in {avg_elapsed:.2f} ms per sample, of which on'
+            f' average {avg_in_classifier:.2f} ms were spent in classification stage')
 
 
 if __name__ == '__main__':

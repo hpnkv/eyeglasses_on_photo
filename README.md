@@ -1,8 +1,8 @@
 # Eyeglasses presence classifier test
 
-This repository contains a pipeline to find images of faces of people wearing eyeglasses. It consists of a small CNN working on top of a face detector and face landmark predictor from `dlib`. It uses two datasets, [MeGlass](https://github.com/cleardusk/MeGlass) and a custom slice from [CelebA](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html), for training and achieves a validation accuracy of 98.62% and 99.7% respectively.
+This repository contains a pipeline to find images of faces of people wearing eyeglasses. It consists of a small CNN working on top of a face detector and face landmark predictor from `dlib`. It uses two datasets, [MeGlass](https://github.com/cleardusk/MeGlass) and a custom slice from [CelebA](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html), for training and achieves a validation accuracy of 99.7% and 98.62% respectively.
 
-If all dependencies are built with CUDA support, the inference time is under 10 ms per image, and is usually around 3–4 ms.
+If all dependencies are built with CUDA support, the inference time inside classification stage is usually around 20 ms. The weights of the model are stored in under 100 KB.
 
 ## Instructions
 
@@ -49,7 +49,17 @@ Vahid Kazemi and Josephine Sullivan, CVPR 2014,
 
 Average inference time using `dlib` built with CUDA support is ~3-4 ms per image for all of the stages above.
 
-### Preparation and training
+### What I did
+
+- Downloaded the MeGlass dataset and wrote an appropriate PyTorch's DataLoader. 
+- Made a CNN using four layers of a simple Conv2d + BatchNorm2d + ReLU pack, interleaved with poolings, followed by a fully connected layer with crossentropy loss
+- Achieved an accuracy of 98.89% on validation. MeGlass is a quite easy dataset, since it only contains plain black glasses, so I:
+- Made an eyeglass dataset off of CelebA by taking all images with eyeglasses and a 1:1 proportion of non-eyeglass images. I cropped and aligned the faces to be of the same size with MeGlass images using `dlib`'s and `imutils`' instruments.
+- Tried learning on CelebA, MeGlass separately and jointly. Joint learning helped increase the accuracy.
+- Tried augmentations (horizontal flip and Gaussian blur both gave + ~0.1pp to accuracy)
+- Tried another architecture of two ResBlocks + necessary convolutions / poolings: didn’t help much.
+- Wrote a data loader for inference data (which crops/aligns from images of any size on the fly)
+- Wrote these docs, train and inference script, installation instructions
 
 All models were trained for 50 epochs.
 
@@ -65,13 +75,18 @@ All models were trained for 50 epochs.
 | 6 |   |   |   |  | |   |
 | 7 |   |   |   | |  |   |
 
-## Error analysis
+## Errors
 
-## Improvements
+## Improvement ideas
 
-- Even though dlib's face detector uses GPU, it still ships data back to the CPU. This could be avoided by using a fully PyTorch-based (or -compatible) pipeline, reducing inference time and raising GPU utilization during training.
-- If we needed an even higher quality, we could try approaches such as knowledge distillation from a bigger network (which can itself be a fine-tuned after a general image classifier), more augmentations such as color jitters.
-- Face detector and shape predictor may be suboptimal, maybe there exist better ones.
+- Overall pipeline
+  - Face detector and shape predictor may be suboptimal, there may exist faster/better ones.
+  - `libjpeg-turbo` and `Pillow-SIMD` for faster JPEG decoding and image processing on the CPU to improve overall time.
+  - Even though dlib's face detector uses GPU, it still ships data back to the CPU. This could be avoided by using a fully PyTorch-based (or -compatible) pipeline, reducing inference time and raising GPU utilization during training (if we use a non-prepared dataset).
+
+- Classification stage
+  - Quantization / mixed precision training
+  - If we needed an even higher quality, we could try approaches such as knowledge distillation from a bigger network (which can itself be a fine-tuned after a general image classifier), more augmentations such as color jitters.
 
 ## Datasets
 
