@@ -4,38 +4,45 @@ This repository contains a pipeline to find images of faces of people wearing ey
 
 If all dependencies are built with CUDA support, the inference time inside classification stage is usually around 20 ms. The weights of the model are stored in under 100 KB.
 
-## Instructions
+## Getting started
 
-### Install CMake
+### Installation
 
-This project uses `dlib`, which uses CMake to build and needs it installed in the system. On Ubuntu, it is as simple as:
+This classifier requires a set of dependencies. To install them in the cleanest way possible, I suggest using the installation scripts I provided:
 ```
-sudo apt install cmake
+# If conda is not installed
+chmod +x ./install_miniconda3.sh
+./install_miniconda3.sh
+
+
+# This creates a conda environment 'eyeglasses' and installs all dependencies
+# inside (assuming CUDA 10.0 is supported). If conda doesn't run, you should
+# correct the path $HOME/miniconda3/etc/profile.d/conda.sh in the script
+# to match your actual conda location.
+
+chmod +x ./bootstrap_conda_env.sh
+./bootstrap_conda_env.sh
+conda activate eyeglasses
+
+# Download dlib models
+chmod +x ./download_dlib_models.sh
+./download_dlib_models.sh
 ```
-(_Optional_) If dlib's build finds CUDA Toolkit during compilation, it will use CUDA. The easiest way to install the CUDA Toolkit is probably with `conda`:
-```
-conda install -c conda-forge cudatoolkit-dev
-```
-
-### Install Python packages
-
-```
-pip install -r requirements.txt
-```
-
-### Acquire datasets and premade face detectors/shape predictors
-
-
-
-### Use the classifier
-
-```
-python infer.py -i <Directory with input images> -d <Device as in torch.to(), default is 'cpu'>
-```
-
-## Pipeline
 
 ### Inference
+
+```
+python infer.py -i <Directory with input images> -d <Device as in torch.to(), default is 'cuda'> --face-detector mmod_human_face_detector.dat --shape-predictor shape_predictor_68_face_landmarks.dat
+```
+
+### Training
+
+Assuming you have all data in place, just run
+```
+python train_best_classifier.py
+```
+
+## Inference pipeline description
 
 - Input image is scaled to 256 pixels by the smaller side, conserving the aspect ratio
 - Face is detected on the photo using `dlib`'s CNN face detector
@@ -49,7 +56,7 @@ Vahid Kazemi and Josephine Sullivan, CVPR 2014,
 
 Average inference time using `dlib` built with CUDA support is ~3-4 ms per image for all of the stages above.
 
-### What I did
+## What I did
 
 - Downloaded the MeGlass dataset and wrote an appropriate PyTorch's DataLoader. 
 - Made a CNN using four layers of a simple Conv2d + BatchNorm2d + ReLU pack, interleaved with poolings, followed by a fully connected layer with crossentropy loss
@@ -60,8 +67,6 @@ Average inference time using `dlib` built with CUDA support is ~3-4 ms per image
 - Tried another architecture of two ResBlocks + necessary convolutions / poolings: didn’t help much.
 - Wrote a data loader for inference data (which crops/aligns from images of any size on the fly)
 - Wrote these docs, train and inference script, installation instructions
-
-All models were trained for 50 epochs.
 
 ## Metrics
 
@@ -75,8 +80,6 @@ All models were trained for 50 epochs.
 | 6 |   |   |   |  | |   |
 | 7 |   |   |   | |  |   |
 
-## Errors
-
 ## Improvement ideas
 
 - Overall pipeline
@@ -85,9 +88,9 @@ All models were trained for 50 epochs.
   - Even though dlib's face detector uses GPU, it still ships data back to the CPU. This could be avoided by using a fully PyTorch-based (or -compatible) pipeline, reducing inference time and raising GPU utilization during training (if we use a non-prepared dataset).
 
 - Classification stage
-  - Quantization / mixed precision training
-  - If we needed an even higher quality, we could try approaches such as knowledge distillation from a bigger network (which can itself be a fine-tuned after a general image classifier), more augmentations such as color jitters.
-
+  - If we needed an even higher quality, we could try approaches such as **knowledge distillation** from a bigger network (which can itself be a fine-tuned after a general image classifier), more augmentations such as color jitters.
+  - Quantization / mixed precision training (especially useful when distilling big networks)
+  
 ## Datasets
 
 - [MeGlass, Face Synthesis for Eyeglass-Robust Face Recognition](https://github.com/cleardusk/MeGlass)
@@ -109,5 +112,3 @@ This repository contains a script `make_celeba_eyeglasses.py` to produce a datas
 | Joint, train |   |   |   |
 | Joint, test |   |   |   |
 |   |   |   |   |
-
-## References
