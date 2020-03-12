@@ -35,6 +35,10 @@ chmod +x ./download_dlib_models.sh
 ```
 python infer.py -i <Directory with input images> -d <Device as in torch.to(), default is 'cuda'> --face-detector mmod_human_face_detector.dat --shape-predictor shape_predictor_68_face_landmarks.dat
 ```
+or, to see average elapsed time per photo (overall and in classifier):
+```
+python infer.py --time True -i <Directory with input images> -d <Device as in torch.to(), default is 'cuda'> --face-detector mmod_human_face_detector.dat --shape-predictor shape_predictor_68_face_landmarks.dat
+```
 
 ### Training
 
