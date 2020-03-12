@@ -8,7 +8,7 @@ If all dependencies are built with CUDA support, the inference time inside class
 
 ### Installation
 
-This classifier requires a set of dependencies. To install them in the cleanest way possible, I suggest using the installation scripts I provided:
+This classifier requires a set of dependencies. To install them in the cleanest way possible, I suggest using the scripts I provided:
 ```
 # If conda is not installed
 chmod +x ./install_miniconda3.sh
@@ -23,6 +23,7 @@ chmod +x ./install_miniconda3.sh
 chmod +x ./bootstrap_conda_env.sh
 ./bootstrap_conda_env.sh
 conda activate eyeglasses
+
 
 # Download dlib models
 chmod +x ./download_dlib_models.sh
@@ -70,15 +71,17 @@ Average inference time using `dlib` built with CUDA support is ~3-4 ms per image
 
 ## Metrics
 
-| # | trained on | # epochs | acc., CelebA | acc., MeGlass | acc., joint | Comment |
-|---|---|---|---|---|---|---|
-| 1 | CelebA |  | **97.6%** | 96.02%  |   |   |
-| 2 | MeGlass |  |  | 98.89% |   |   |
-| 3 | Joint data  | 76 | 98.43% | 99.7% |   | 50% chance HFlip augmentation |
-| 4 | Joint data | 47 | 98.62% |  |   | 50% chance HFlip, 10% chance blur |
-| 5 | Joint data  | 17 | 98.55% | |   | Augmentations + resblocks |
-| 6 |   |   |   |  | |   |
-| 7 |   |   |   | |  |   |
+All models were allowed to train for 200 epochs. Epochs column cites when the best accuracy was attained.
+
+| # | trained on | # epochs | acc., CelebA | acc., MeGlass  | Comment |
+|---|---|---|---|---|---|
+| 1 | CelebA | 93 | 97.6% | 96.02%  |   |
+| 2 | MeGlass | 100 | 76.3% | 98.89% | Evidently, CelebA based training generalizes to MeGlass samples, but not vice versa   |
+| 3 | Joint data  | 76 | 98.43% | 99.7% | 50% chance HFlip augmentation |
+| 4 | Joint data | 47 | 98.62% | 99.7% | 50% chance HFlip, 10% chance blur |
+| 5 | Joint data  | 17 | 98.55% | 99.7% | Augmentations + resblocks |
+| 6 | Joint data  | 140 | 98.73% |  | 50% chance HFlip, 10% chance blur, white balance correction  |
+| 7 |   |   |   | |  |
 
 ## Improvement ideas
 
@@ -107,8 +110,5 @@ This repository contains a script `make_celeba_eyeglasses.py` to produce a datas
 |---|---|---|---|
 | MeGlass, train | 47,917 | 14,832 | 33,085 |
 | MeGlass, test | 6,840 | 3,420 | 3,420 |
-| CelebA eyeglasses, train | 20,929 |   |   |
-| CelebA eyeglasses, test | 2,752 |   |   |
-| Joint, train |   |   |   |
-| Joint, test |   |   |   |
-|   |   |   |   |
+| CelebA eyeglasses, train | 20,929 | ~10,450 | ~10,450 |
+| CelebA eyeglasses, test | 2,752 | ~1,375 | ~1,375  |
