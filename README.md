@@ -84,8 +84,7 @@ All models were allowed to train for 200 epochs. Epochs column cites when the be
 | 3 | Joint data  | 76 | 98.43% | 99.7% | 50% chance HFlip augmentation |
 | 4 | Joint data | 47 | 98.62% | 99.7% | 50% chance HFlip, 10% chance blur |
 | 5 | Joint data  | 17 | 98.55% | 99.7% | Augmentations + resblocks |
-| 6 | Joint data  | 140 | 98.73% |  | 50% chance HFlip, 10% chance blur, white balance correction  |
-| 7 |   |   |   | |  |
+| 6 | Joint data  | 140 | 98.73% | 99.7% | 50% chance HFlip, 10% chance blur, white balance correction  |
 
 ## Improvement ideas
 
