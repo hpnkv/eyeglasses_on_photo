@@ -2,7 +2,7 @@ conda create -y -n eyeglasses python==3.6.10
 source $HOME/miniconda3/etc/profile.d/conda.sh
 conda activate eyeglasses
 
-# CUDA 10.0
+# CUDA 10.0 tools to compile dlib
 conda install -yc anaconda cudatoolkit=10.0.130=0 cudnn=7.6.5=cuda10.0_0
 conda install -yc conda-forge/label/cf201901 cudatoolkit-dev=10.0=1
 
