@@ -1,7 +1,7 @@
 import cv2
 import torch
 from PIL import Image
-from imutils import opencv2matplotlib
+from imutils import opencv2matplotlib, face_utils
 
 from ml_glasses.model import GlassesClassifier
 from ml_glasses.transforms import FaceAlignTransform, ToTensor
@@ -35,6 +35,7 @@ def main():
             frame = cv2.resize(frame, (320, 180))
 
             image = opencv2matplotlib(frame)
+            bboxes = align.bounding_boxes(cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY))
             image = Image.fromarray(image)
             image = tensorize(align(image))
             image = image.unsqueeze(0)
@@ -55,6 +56,9 @@ def main():
                             FONT_SCALE,
                             FONT_COLOR,
                             LINE_TYPE)
+            for bbox in bboxes:
+                (x, y, w, h) = face_utils.rect_to_bb(bbox.rect)
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cv2.imshow(winname, frame)
         rval, frame = vc.read()
 

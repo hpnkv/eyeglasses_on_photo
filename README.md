@@ -2,7 +2,7 @@
 
 This repository contains a pipeline to find images of faces of people wearing eyeglasses. It consists of a small CNN in PyTorch working on top of a face detector and face landmark predictor from `dlib`. It uses two datasets, [MeGlass](https://github.com/cleardusk/MeGlass) and a custom slice from [CelebA](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html), for training and achieves a validation accuracy of 99.7% and 98.62% respectively.
 
-If all dependencies are built with CUDA support, the inference time inside classification stage is usually below 10 ms. The weights of the model are stored in under 100 KB.
+If all dependencies are built with CUDA support, the inference time inside classification stage is usually below 10 ms on a 1080 Ti GPU. The weights of the model are stored in under 100 KB.
 
 ## Getting started
 
@@ -60,7 +60,7 @@ Don't miss out on `camera_demo.py`! Just open it with Python and it should pop u
 
 - Input image is scaled to 256 pixels by the smaller side, conserving the aspect ratio
 - Face is detected on the photo using `dlib`'s CNN face detector
-  - if the detector sees no faces, it takes a square center crop of the image
+  - if the detector sees no faces, it returns an array of `np.nan`'s.
 - Pose is estimated using `dlib`'s implementation of the paper
 «One Millisecond Face Alignment with an Ensemble of Regression Trees» by
 Vahid Kazemi and Josephine Sullivan, CVPR 2014,
