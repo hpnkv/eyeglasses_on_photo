@@ -79,6 +79,7 @@ Average inference time using `dlib` built with CUDA support is under 50 ms per i
 - Tried another architecture of two ResBlocks + necessary convolutions / poolings: didn’t help much.
 - Wrote a data loader for inference data (which crops/aligns from images of any size on the fly)
 - Wrote these docs, train and inference script, installation instructions
+- Made a simple demo for a web camera
 
 ## Metrics
 
