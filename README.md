@@ -2,7 +2,7 @@
 
 This repository contains a pipeline to find images of faces of people wearing eyeglasses. It consists of a small CNN working on top of a face detector and face landmark predictor from `dlib`. It uses two datasets, [MeGlass](https://github.com/cleardusk/MeGlass) and a custom slice from [CelebA](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html), for training and achieves a validation accuracy of 99.7% and 98.62% respectively.
 
-If all dependencies are built with CUDA support, the inference time inside classification stage is usually around 20 ms. The weights of the model are stored in under 100 KB.
+If all dependencies are built with CUDA support, the inference time inside classification stage is usually below 10 ms. The weights of the model are stored in under 100 KB.
 
 ## Getting started
 
