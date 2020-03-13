@@ -34,8 +34,7 @@ def main(args):
         total_seconds_in_classifier += (datetime.now() - inference_start).total_seconds()
         _, labels = torch.max(preds.data, 1)
         if labels.item() == 1:
-            filename = os.path.split(sample['filename'][0])[-1]
-            print(filename)
+            print(sample['filename'][0])
 
     if args.time:
         avg_elapsed = (datetime.now() - start_time).total_seconds() * 1000 / len(dataset)
