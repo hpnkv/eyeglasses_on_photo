@@ -7,16 +7,17 @@ from ml_glasses.model import GlassesClassifier
 from ml_glasses.transforms import FaceAlignTransform, ToTensor
 
 
-font                   = cv2.FONT_HERSHEY_SIMPLEX
-bottomLeftCornerOfText = (10, 160)
-fontScale              = 1
-fontColor              = (255, 255, 255)
-lineType               = 2
+FONT = cv2.FONT_HERSHEY_SIMPLEX
+BOTTOM_LEFT_CORNER = (10, 160)
+FONT_SCALE = 1
+FONT_COLOR = (255, 255, 255)
+LINE_TYPE = 2
 
 
 def main():
     model = GlassesClassifier()
-    model.load_state_dict(torch.load('checkpoint.pt', map_location=torch.device('cpu')))
+    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+    model.load_state_dict(torch.load('checkpoint.pt', map_location=device))
     model.train(False)
     align = FaceAlignTransform(detector_model='mmod_human_face_detector.dat',
                                shape_predictor='shape_predictor_68_face_landmarks.dat')
@@ -25,7 +26,7 @@ def main():
     winname = 'Do I wear eyeglasses?'
     cv2.namedWindow(winname)
     vc = cv2.VideoCapture(0)
-    vc.set(cv2.CAP_PROP_FPS, 5)
+    vc.set(cv2.CAP_PROP_FPS, 60)
 
     rval, frame = vc.read()
 
@@ -42,18 +43,18 @@ def main():
 
             if labels.item() == 1:
                 cv2.putText(frame, 'Yes!',
-                            bottomLeftCornerOfText,
-                            font,
-                            fontScale,
-                            fontColor,
-                            lineType)
+                            BOTTOM_LEFT_CORNER,
+                            FONT,
+                            FONT_SCALE,
+                            FONT_COLOR,
+                            LINE_TYPE)
             else:
                 cv2.putText(frame, 'No...',
-                            bottomLeftCornerOfText,
-                            font,
-                            fontScale,
-                            fontColor,
-                            lineType)
+                            BOTTOM_LEFT_CORNER,
+                            FONT,
+                            FONT_SCALE,
+                            FONT_COLOR,
+                            LINE_TYPE)
             cv2.imshow(winname, frame)
         rval, frame = vc.read()
 

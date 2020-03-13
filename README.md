@@ -50,6 +50,10 @@ Assuming you have all data in place, just run
 python train_best_classifier.py
 ```
 
+### Demo
+
+Don't miss out on `camera_demo.py`! Just open it with Python and it should pop up a window telling if you're wearing eyeglasses. If you have CUDA enabled on your desktop, it will even happen at decent speed.
+
 ## Inference pipeline description
 
 - Input image is scaled to 256 pixels by the smaller side, conserving the aspect ratio
