@@ -98,15 +98,14 @@ All models were allowed to train for 200 epochs. Epochs column cites when the be
 | 7 | Joint data | | | | Deeper architecture |
 
 ## Improvement ideas
-
-- Overall pipeline
-  - Face detector and shape predictor may be suboptimal, there may exist faster/better ones.
-  - `libjpeg-turbo` and `Pillow-SIMD` for faster JPEG decoding and image processing on the CPU to improve overall time.
-  - Even though dlib's face detector uses GPU, it still ships data back to the CPU. This could be avoided by using a fully PyTorch-based (or -compatible) pipeline, reducing inference time and raising GPU utilization during training (if we use a non-prepared dataset).
-
 - Classification stage
   - If we needed an even higher quality, we could try approaches such as **knowledge distillation** from a bigger network (which can itself be a fine-tuned after a general image classifier), more augmentations such as color jitters.
   - Quantization / mixed precision training (especially useful when distilling big networks)
+
+- Overall pipeline
+  - Face detector and shape predictor may be suboptimal for the task, there may exist faster/better ones. One straightforward  replacement can be using a 5-landmark detector instead of 68. It can be done with a drop-in replacement.
+  - `libjpeg-turbo` and `Pillow-SIMD` for faster JPEG decoding and image processing on the CPU to improve overall time.
+  - Even though dlib's face detector uses GPU, it still ships data back to the CPU. This could be avoided by using a fully PyTorch-based (or -compatible) pipeline, reducing inference time and raising GPU utilization during training (if we use a non-prepared dataset).
   
 ## Datasets
 

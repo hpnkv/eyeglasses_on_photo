@@ -20,7 +20,7 @@ def main():
     model.load_state_dict(torch.load('checkpoint.pt', map_location=device))
     model.train(False)
     align = FaceAlignTransform(detector_model='mmod_human_face_detector.dat',
-                               shape_predictor='shape_predictor_68_face_landmarks.dat')
+                               shape_predictor='shape_predictor_5_face_landmarks.dat')
     tensorize = ToTensor()
 
     winname = 'Am I wearing eyeglasses?'

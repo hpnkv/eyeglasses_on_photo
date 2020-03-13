@@ -104,10 +104,6 @@ if __name__ == '__main__':
                         help='Which device to run on (default is \'cuda\')')
     parser.add_argument('-o', '--output', type=str, required=False, default='checkpoint.pt',
                         help='Where to save checkpoints')
-    parser.add_argument('--shape-predictor', type=str, required=False,
-                        help='Path to dlib\'s shape predictor model')
-    parser.add_argument('--face-detector', type=str, required=False,
-                        help='Path to dlib\'s face detector model')
 
     args = parser.parse_args()
 
