@@ -61,13 +61,13 @@ Vahid Kazemi and Josephine Sullivan, CVPR 2014,
 - Face is aligned into a square shape using a face aligner utility from `imutils`
 - A convolutional neural network from `ml_glasses/model.py` is applied to get the prediction
 
-Average inference time using `dlib` built with CUDA support is ~3-4 ms per image for all of the stages above.
+Average inference time using `dlib` built with CUDA support is under 50 ms per image for all of the stages above, excluding decoding.
 
 ## What I did
 
 - Downloaded the MeGlass dataset and wrote an appropriate PyTorch's DataLoader. 
 - Made a CNN using four layers of a simple Conv2d + BatchNorm2d + ReLU pack, interleaved with poolings, followed by a fully connected layer with crossentropy loss
-- Achieved an accuracy of 98.89% on validation. MeGlass is a quite easy dataset, since it only contains plain black glasses, so I:
+- Achieved an accuracy of 98.89% on validation. MeGlass is quite an easy dataset, since it only contains plain black glasses, so I:
 - Made an eyeglass dataset off of CelebA by taking all images with eyeglasses and a 1:1 proportion of non-eyeglass images. I cropped and aligned the faces to be of the same size with MeGlass images using `dlib`'s and `imutils`' instruments.
 - Tried learning on CelebA, MeGlass separately and jointly. Joint learning helped increase the accuracy.
 - Tried augmentations (horizontal flip and Gaussian blur both gave + ~0.1pp to accuracy)
