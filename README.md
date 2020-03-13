@@ -85,7 +85,7 @@ Average inference time using `dlib` built with CUDA support is under 50 ms per i
 
 ## Metrics
 
-All models were allowed to train for 200 epochs. Epochs column cites when the best accuracy was attained.
+All models were allowed to train for 200 epochs with batch size 64, by SGD with learning rate 0.002 and momentum 0.9, on one GPU. Epochs column cites when the best accuracy was attained.
 
 | # | trained on | # epochs | acc., CelebA | acc., MeGlass  | Comment |
 |---|---|---|---|---|---|
