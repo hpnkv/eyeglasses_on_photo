@@ -23,7 +23,7 @@ def main():
                                shape_predictor='shape_predictor_68_face_landmarks.dat')
     tensorize = ToTensor()
 
-    winname = 'Do I wear eyeglasses?'
+    winname = 'Am I wearing eyeglasses?'
     cv2.namedWindow(winname)
     vc = cv2.VideoCapture(0)
     vc.set(cv2.CAP_PROP_FPS, 60)
