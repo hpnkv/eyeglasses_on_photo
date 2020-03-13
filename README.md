@@ -18,7 +18,8 @@ chmod +x ./install_miniconda3.sh
 # This creates a conda environment 'eyeglasses' and installs all dependencies
 # inside (assuming CUDA 10.0 is supported). If conda doesn't run, you should
 # correct the path $HOME/miniconda3/etc/profile.d/conda.sh in the script
-# to match your actual conda location.
+# to match your actual conda location. These lines are going to be slow
+# on cudatoolkit-dev stage
 
 chmod +x ./bootstrap_conda_env.sh
 ./bootstrap_conda_env.sh
