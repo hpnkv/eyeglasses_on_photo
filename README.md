@@ -52,7 +52,7 @@ python train_best_classifier.py
 
 ### Demo
 
-Don't miss out on `camera_demo.py`! Just open it with Python and it should pop up a window telling if you're wearing eyeglasses. If you have CUDA enabled on your desktop, it will even happen at decent speed. It also may require `opencv-python-headless`. Here is a small GIF using a CPU:
+Don't miss out on `camera_demo.py`! Just open it with Python and it should pop up a window telling if you're wearing eyeglasses. If you have CUDA enabled on your desktop, it will even happen at decent speed (although still not optimal because of lots of array copies). It also may require `opencv-python-headless`. Here is a small GIF using a CPU:
 
 ![Classification demo](camera_demo.gif)
 

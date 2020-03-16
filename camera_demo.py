@@ -14,6 +14,15 @@ FONT_COLOR = (255, 255, 255)
 LINE_TYPE = 2
 
 
+def put_text(frame, position, text):
+    cv2.putText(frame, text,
+                position,
+                FONT,
+                FONT_SCALE,
+                FONT_COLOR,
+                LINE_TYPE)
+
+
 def main():
     model = GlassesClassifier()
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
@@ -43,19 +52,9 @@ def main():
             _, labels = torch.max(pred.data, 1)
 
             if labels.item() == 1:
-                cv2.putText(frame, 'Yes!',
-                            BOTTOM_LEFT_CORNER,
-                            FONT,
-                            FONT_SCALE,
-                            FONT_COLOR,
-                            LINE_TYPE)
+                put_text(frame, BOTTOM_LEFT_CORNER, 'Yes!')
             else:
-                cv2.putText(frame, 'No...',
-                            BOTTOM_LEFT_CORNER,
-                            FONT,
-                            FONT_SCALE,
-                            FONT_COLOR,
-                            LINE_TYPE)
+                put_text(frame, BOTTOM_LEFT_CORNER, 'No...')
             for bbox in bboxes:
                 (x, y, w, h) = face_utils.rect_to_bb(bbox.rect)
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
